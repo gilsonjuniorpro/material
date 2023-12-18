@@ -34,6 +34,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
   bool _newPasswordVisible = false;
   bool _confirmPasswordVisible = false;
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _newPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -95,15 +96,19 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
 
   Widget buildPasswordField(String label) {
     bool isPasswordVisible;
+    TextEditingController? controller = null;
+
     if (label == 'Current password') {
       isPasswordVisible = _currentPasswordVisible;
     } else if (label == 'New password') {
       isPasswordVisible = _newPasswordVisible;
+      controller = _newPasswordController;
     } else {
       isPasswordVisible = _confirmPasswordVisible;
     }
 
     return TextFormField(
+      controller: controller,
       style: TextStyle(color: Colors.grey), // Text color
       obscureText: !isPasswordVisible,
       decoration: InputDecoration(
@@ -136,9 +141,17 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
         if (value == null || value.isEmpty) {
           return 'This field is required';
         }
-        if ((label == 'New password' || label == 'Confirm new password') && !isValidPassword(value)) {
+        if ((label == 'New password') && !isValidPassword(value)) {
           return 'create a unique password. include 9 characters minimum with 1 Capital letter, 1 lower casa, 1 number or 1 special character <>~@#\$%^&*()\'';
         }
+
+        if ((label == 'Confirm new password') && !isValidPassword(value)) {
+          return 'create a unique password. include 9 characters minimum with 1 Capital letter, 1 lower casa, 1 number or 1 special character <>~@#\$%^&*()\'';
+        }
+        if (label == 'Confirm new password' && value != _newPasswordController.text) {
+          return 'That didn\'t match. Enter your new password again.';
+        }
+
         return null;
       },
     );
