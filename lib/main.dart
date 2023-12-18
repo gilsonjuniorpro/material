@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         inputDecorationTheme: InputDecorationTheme(
           border: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.green.shade900),
+            borderSide: BorderSide(color: Color(0xFF006C50)),
           ),
           filled: true,
           fillColor: Colors.white,
@@ -30,7 +30,9 @@ class UpdatePasswordScreen extends StatefulWidget {
 }
 
 class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
-  bool _passwordVisible = false;
+  bool _currentPasswordVisible = false;
+  bool _newPasswordVisible = false;
+  bool _confirmPasswordVisible = false;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -51,26 +53,29 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                   'Update your password',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 16),
                 Text(
                   'Enter a new password you\'ve never used',
                   style: TextStyle(fontSize: 18),
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 24),
                 buildPasswordField('Current password'),
-                SizedBox(height: 20),
+                SizedBox(height: 24),
                 Divider(height: 30, color: Colors.grey.shade400),
-                SizedBox(height: 20),
+                SizedBox(height: 24),
                 buildPasswordField('New password'),
-                SizedBox(height: 40),
+                SizedBox(height: 50),
                 buildPasswordField('Confirm new password'),
-                SizedBox(height: 30),
+                SizedBox(height: 50),
                 SizedBox(
                   width: double.infinity,
-                  height: 50,
+                  height: 56,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white, backgroundColor: Colors.green.shade800, // text color
+                      foregroundColor: Colors.white, backgroundColor: Color(0xFF006C50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16), // Set border radius here
+                      ), // text color
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
@@ -89,27 +94,41 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
   }
 
   Widget buildPasswordField(String label) {
+    bool isPasswordVisible;
+    if (label == 'Current password') {
+      isPasswordVisible = _currentPasswordVisible;
+    } else if (label == 'New password') {
+      isPasswordVisible = _newPasswordVisible;
+    } else {
+      isPasswordVisible = _confirmPasswordVisible;
+    }
+
     return TextFormField(
       style: TextStyle(color: Colors.grey), // Text color
-      obscureText: !(_passwordVisible && label == 'Current password'),
+      obscureText: !isPasswordVisible,
       decoration: InputDecoration(
         labelText: label,
         labelStyle: TextStyle(color: Colors.grey), // Label color
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.green), // Border color
+          borderSide: BorderSide(color: Color(0xFF006C50)), // Border color
         ),
-        suffixIcon: label == 'Current password'
-            ? IconButton(
+        suffixIcon: IconButton(
           icon: Icon(
-            _passwordVisible ? Icons.visibility : Icons.visibility_off,
-            color: Colors.green, // Icon color
+            isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+            color: Color(0xFF006C50), // Icon color
           ),
           onPressed: () {
             setState(() {
-              _passwordVisible = !_passwordVisible;
+              if (label == 'Current password') {
+                _currentPasswordVisible = !_currentPasswordVisible;
+              } else if (label == 'New password') {
+                _newPasswordVisible = !_newPasswordVisible;
+              } else {
+                _confirmPasswordVisible = !_confirmPasswordVisible;
+              }
             });
           },
-        ) : null,
+        ),
         errorMaxLines: 3,
       ),
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -117,7 +136,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
         if (value == null || value.isEmpty) {
           return 'This field is required';
         }
-        if (!isValidPassword(value)) {
+        if ((label == 'New password' || label == 'Confirm new password') && !isValidPassword(value)) {
           return 'create a unique password. include 9 characters minimum with 1 Capital letter, 1 lower casa, 1 number or 1 special character <>~@#\$%^&*()\'';
         }
         return null;
