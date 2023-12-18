@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        inputDecorationTheme: InputDecorationTheme(
+        inputDecorationTheme: const InputDecorationTheme(
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Color(0xFF006C50)),
           ),
@@ -40,7 +40,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: const Text(''),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -50,30 +50,30 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
+                const Text(
                   'Update your password',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 16),
-                Text(
+                const SizedBox(height: 16),
+                const Text(
                   'Enter a new password you\'ve never used',
                   style: TextStyle(fontSize: 18),
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
                 buildPasswordField('Current password'),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
                 Divider(height: 30, color: Colors.grey.shade400),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
                 buildPasswordField('New password'),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
                 buildPasswordField('Confirm new password'),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
                 SizedBox(
                   width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white, backgroundColor: Color(0xFF006C50),
+                      foregroundColor: Colors.white, backgroundColor: const Color(0xFF006C50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16), // Set border radius here
                       ), // text color
@@ -83,7 +83,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                         // Process data
                       }
                     },
-                    child: Text('Update Password'),
+                    child: const Text('Update Password'),
                   ),
                 ),
               ],
@@ -96,7 +96,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
 
   Widget buildPasswordField(String label) {
     bool isPasswordVisible;
-    TextEditingController? controller = null;
+    TextEditingController? controller;
 
     if (label == 'Current password') {
       isPasswordVisible = _currentPasswordVisible;
@@ -109,18 +109,18 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
 
     return TextFormField(
       controller: controller,
-      style: TextStyle(color: Colors.grey), // Text color
+      style: const TextStyle(color: Colors.grey), // Text color
       obscureText: !isPasswordVisible,
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: TextStyle(color: Colors.grey), // Label color
-        border: OutlineInputBorder(
+        labelStyle: const TextStyle(color: Colors.grey), // Label color
+        border: const OutlineInputBorder(
           borderSide: BorderSide(color: Color(0xFF006C50)), // Border color
         ),
         suffixIcon: IconButton(
           icon: Icon(
             isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-            color: Color(0xFF006C50), // Icon color
+            color: const Color(0xFF006C50), // Icon color
           ),
           onPressed: () {
             setState(() {
