@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import 'CustomAlertDialog.dart';
+import 'LoadingModal.dart';
 
 void main() {
   runApp(MyApp());
@@ -35,6 +39,14 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
   bool _confirmPasswordVisible = false;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _newPasswordController = TextEditingController();
+
+  void positiveAction() {
+    Fluttertoast.showToast(msg: "The ok button was clicked");
+  }
+
+  void negativeAction() {
+    Fluttertoast.showToast(msg: "The cancel button was clicked");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +92,28 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        // Process data
+                        showLoadingModal(context, "Sending reset link");
+                        // Simulate some loading process
+                        Future.delayed(Duration(seconds: 3), () {
+                          closeLoadingModal(context); // Close modal after 3 seconds
+                        });
+
+                        Future.delayed(Duration(seconds: 5), () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return CustomAlertDialog(
+                                title: "Reset link sent!",
+                                content: "A reset link was sent to gilsonjuniorpro@gmail.com. Please follow the instructions in that email to reset your password.",
+                                onOkButtonPressed: positiveAction,
+                                //onCancelButtonPressed: negativeAction,
+                                //buttonBackgroundColor: Colors.green,
+                                //buttonTextColor: Colors.yellow,
+                                buttonPositiveText: "Okay",
+                              );
+                            },
+                          ); // Close modal after 3 seconds
+                        });
                       }
                     },
                     child: const Text('Update Password'),
@@ -92,6 +125,18 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
         ),
       ),
     );
+  }
+
+  void showLoadingModal(BuildContext context, String text) {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Dialog will not close when clicked outside
+      builder: (_) => LoadingModal(loadingText: text),
+    );
+  }
+
+  void closeLoadingModal(BuildContext context) {
+    Navigator.of(context).pop(); // Close the topmost screen (the modal)
   }
 
   Widget buildPasswordField(String label) {
