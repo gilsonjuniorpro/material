@@ -9,6 +9,7 @@ class CustomAlertDialog extends StatelessWidget {
   final String content;
   final OkButtonCallback? onOkButtonPressed;
   final CancelButtonCallback? onCancelButtonPressed;
+  final Color backgroundColor; // Added parameter for background color
   final Color buttonBackgroundColor;
   final Color buttonTextColor;
   final Color titleColor;
@@ -23,6 +24,7 @@ class CustomAlertDialog extends StatelessWidget {
     required this.content,
     this.onOkButtonPressed,
     this.onCancelButtonPressed,
+    this.backgroundColor = Colors.white, // Default color is white
     this.buttonBackgroundColor = Colors.black,
     this.buttonTextColor = Colors.white,
     this.titleColor = Colors.black,
@@ -35,8 +37,9 @@ class CustomAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(title),
-      content: Text(content),
+      backgroundColor: backgroundColor,  // Use the passed backgroundColor
+      title: Text(title, style: TextStyle(color: titleColor)),
+      content: Text(content, style: TextStyle(color: contentColor)),
       actions: [
         ElevatedButton(
           onPressed: () {
